@@ -43,39 +43,39 @@ import java.util.List;
 
 //Java：买卖股票的最佳时机 IV
 public class P188BestTimeToBuyAndSellStockIv {
-    public static void main(String[] args) {
-        Solution solution = new P188BestTimeToBuyAndSellStockIv().new Solution();
-        // TO TEST
-        int[] prices = new int[]{2, 4, 1};
-        System.out.println(solution.maxProfit(2, prices));
-    }
+  public static void main(String[] args) {
+    Solution solution = new P188BestTimeToBuyAndSellStockIv().new Solution();
+    // TO TEST
+    int[] prices = new int[]{2, 7, 8, 5, 4, 3};
+    System.out.println(solution.maxProfit(2, prices));
+  }
 
-    //leetcode submit region begin(Prohibit modification and deletion)
-    class Solution {
-        public int maxProfit(int k, int[] prices) {
-            if (k == 0 || prices.length == 0) return 0;
-            if (k >= prices.length / 2) return quickSolve(prices);
+  //leetcode submit region begin(Prohibit modification and deletion)
+  class Solution {
+    public int maxProfit(int k, int[] prices) {
+      int n = prices.length;
+      if (k == 0 || n == 0) return 0;
 
-            int[][] profit = new int[k + 1][prices.length];
-
-            for (int time = 1; time <= k; time++) {
-                int tempMaxProfit = profit[time - 1][0] - prices[0];
-                for (int i = 1; i < prices.length; i++) {
-                    profit[time][i] = Math.max(profit[time][i - 1], tempMaxProfit + prices[i]);
-                    tempMaxProfit = Math.max(tempMaxProfit, profit[time - 1][i - 1] - prices[i]);
-                }
-            }
-            return profit[k][prices.length - 1];
+      if (k >= n / 2) {
+        int maxPro = 0;
+        for (int i = 1; i < n; i++) {
+          if (prices[i] > prices[i - 1])
+            maxPro += prices[i] - prices[i - 1];
         }
+        return maxPro;
+      }
 
-        public int quickSolve(int[] prices) {
-            int res = 0;
-            for (int i = 1; i < prices.length; i++) {
-                if (prices[i] > prices[i - 1]) res += prices[i] - prices[i - 1];
-            }
-            return res;
+      int[][] dp = new int[k + 1][n];
+      for (int i = 1; i <= k; i++) {
+        int buy = dp[i - 1][0] - prices[0];
+        for (int j = 1; j < n; j++) {
+          dp[i][j] = Math.max(dp[i][j - 1], buy + prices[j]);
+          buy = Math.max(buy, dp[i - 1][j] - prices[j]);
         }
+      }
+      return dp[k][n - 1];
     }
+  }
 //leetcode submit region end(Prohibit modification and deletion)
 
 }
