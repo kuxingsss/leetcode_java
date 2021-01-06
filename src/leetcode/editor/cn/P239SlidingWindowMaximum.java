@@ -42,51 +42,73 @@ package leetcode.editor.cn;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 //Java：滑动窗口最大值
 public class P239SlidingWindowMaximum {
-    public static void main(String[] args) {
-        Solution solution = new P239SlidingWindowMaximum().new Solution();
-        // TO TEST
-        int[] nums = {1, 3, 1, 2, 0, 5};
-        int k = 3;
-        int[] res = solution.maxSlidingWindow(nums, k);
-        for (int i = 0; i < res.length; i++) {
-            System.out.println(res[i]);
+  public static void main(String[] args) {
+    Solution solution = new P239SlidingWindowMaximum().new Solution();
+    // TO TEST
+    int[] nums = {7, 2, 4};
+    int k = 2;
+    int[] res = solution.maxSlidingWindow(nums, k);
+    System.out.println(Arrays.toString(res));
+  }
+
+  //leetcode submit region begin(Prohibit modification and deletion)
+  class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+      int len = nums.length, index = 0;
+      if (len * k == 0) return new int[0];
+      if (k == 1) return nums;
+
+      ArrayDeque<Integer> window = new ArrayDeque<>();
+      int[] res = new int[len - k + 1];
+
+      for (int i = 0; i < len; i++) {
+        if (window.size() != 0 && window.getFirst() <= i - k) {
+          window.removeFirst();
         }
-    }
-
-    //leetcode submit region begin(Prohibit modification and deletion)
-    class Solution {
-
-        public int[] maxSlidingWindow(int[] nums, int k) {
-            int n = nums.length;
-            int resIndex = 0;
-            ArrayDeque<Integer> window = new ArrayDeque<>();
-            int[] res = new int[n - k + 1];
-            if (n * k == 0) {
-                return new int[0];
-            }
-            if (k == 1){
-                return nums;
-            }
-            for (int i = 0; i < n; i++) {
-
-                if (window.size() != 0 && window.getFirst() <= i - k) {
-                    window.removeFirst();
-                }
-                while (window.size() != 0 && nums[window.getLast()] <= nums[i]) {
-                    window.removeLast();
-                }
-                window.addLast(i);
-                if (i >= k - 1) {
-                    res[resIndex++] = nums[window.getFirst()];
-                }
-            }
-            return res;
+        while (window.size() != 0 && nums[window.getLast()] <= nums[i]) {
+          window.removeLast();
         }
+        window.addLast(i);
+        if (i >= k - 1) {
+          res[index++] = nums[window.getFirst()];
+        }
+      }
+      return res;
     }
+  }
 //leetcode submit region end(Prohibit modification and deletion)
-
+//class Solution {
+//
+//  public int[] maxSlidingWindow(int[] nums, int k) {
+//    int n = nums.length;
+//    int resIndex = 0;
+//    ArrayDeque<Integer> window = new ArrayDeque<>();
+//    int[] res = new int[n - k + 1];
+//    if (n * k == 0) {
+//      return new int[0];
+//    }
+//    if (k == 1){
+//      return nums;
+//    }
+//    for (int i = 0; i < n; i++) {
+//
+//      if (window.size() != 0 && window.getFirst() <= i - k) {
+//        window.removeFirst();
+//      }
+//      while (window.size() != 0 && nums[window.getLast()] <= nums[i]) {
+//        window.removeLast();
+//      }
+//      window.addLast(i);
+//      if (i >= k - 1) {
+//        res[resIndex++] = nums[window.getFirst()];
+//      }
+//    }
+//    return res;
+//  }
+//}
 }
